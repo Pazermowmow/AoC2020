@@ -1,0 +1,26 @@
+file = open("aoc3.txt", "r")
+paths  = file.read()
+file.close()
+paths = paths.split("\n")
+paths = np.array(paths)
+
+def treecount(paths, slope):
+    if slope[1] > 1:
+        paths = paths[::slope[1]]
+    width = len(paths[0])
+    x     = 0
+    y     = 0
+    height = len(paths)
+    count = 0
+    for i in range(height-1):
+        x += slope[0]
+        x = x%width
+        y += 1
+        if paths[y][x] == "#":
+            count += 1
+    return count
+    
+zoomies = [1,1], [3,1], [5,1], [7,1], [1,2]
+solution = 1
+for i in zoomies:
+    solution = solution*treecount(paths, i)
