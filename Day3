@@ -1,17 +1,17 @@
-with open("aoc3.txt",'r') as file:
+with open("aoc3.txt",'r') as file:                   # Import puzzle input
      paths = file.read()
 paths = np.array(paths.split("\n"))
 
 def treecount(paths, slope):
-    if slope[1] > 1:
+    if slope[1] > 1:                                 # If the y-gradient is >1, simulate this by skipping rows corresponding to said gradient
         paths = paths[::slope[1]]
-    width, height = len(paths[0]), len(paths)
-    x, y, count = 0, 0, 0
-    for i in range(height-1):
-        x += slope[0]
-        x = x%width
-        y += 1
-        if paths[y][x] == "#":
+    width, height = len(paths[0]), len(paths)        # Sets width of repeating pattern and total slope height
+    x, y, count = 0, 0, 0                            # Set initial values
+    for i in range(height-1):                        # For each row of tree/not tree
+        x += slope[0]                                # Move in x-direction
+        x = x%width                                  # Modulo simulates repeating pattern
+        y += 1                                       # Move down one row (compensated by line 6 for >1 gradients)
+        if paths[y][x] == "#":                       # If ramming a tree add 1 to count
             count += 1
     return count
     
