@@ -1,17 +1,12 @@
-file = open("aoc3.txt", "r")
-paths  = file.read()
-file.close()
-paths = paths.split("\n")
-paths = np.array(paths)
+with open("aoc3.txt",'r') as file:
+     paths = file.read()
+paths = np.array(paths.split("\n"))
 
 def treecount(paths, slope):
     if slope[1] > 1:
         paths = paths[::slope[1]]
-    width = len(paths[0])
-    x     = 0
-    y     = 0
-    height = len(paths)
-    count = 0
+    width, height = len(paths[0]), len(paths)
+    x, y, count = 0, 0, 0
     for i in range(height-1):
         x += slope[0]
         x = x%width
