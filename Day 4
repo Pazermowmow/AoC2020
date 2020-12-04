@@ -1,0 +1,70 @@
+"""An overly complicated method because I wanted to use pandas"""
+
+import pandas as pd
+import re
+
+# Part One
+fields, data = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid", "cid"], []
+cols={"byr":[], "iyr":[], "eyr":[], "hgt":[], "hcl":[], "ecl":[], "pid":[], "cid":[]}
+with open("aoc4.txt",'r') as file:
+     rawdata = file.read()
+rawdata = np.array(rawdata.split("\n\n"))
+for i in rawdata:
+    data.append(i.replace("\n", " ").split())
+for i in data:
+    x = []
+    for j in i:
+        x.append(j[:3])
+        for field in fields:
+            if field in j:
+                cols[field].append(j.replace(field+":", ""))
+    for i in set(fields).difference(set(x)):
+        cols[i].append(np.nan)
+df = pd.DataFrame(data=cols)
+x = df.drop("cid",axis=1)
+mask = False
+for col in x.columns: 
+    mask = mask | x[col].isnull()
+dfnulls = x[mask]
+validpart1 = len(df) - len(dfnulls)
+
+# Part Two
+def hgtcheck(d):
+    d = str(d)
+    if d[-2:] == "cm":
+        if int(d[:-2]) >= 150 and int(d[:-2]) <= 193:
+            return True
+    if d[-2:] == "in":
+        if int(d[:-2]) >= 59 and int(d[:-2]) <= 76:
+            return True
+    return False
+def hclcheck(d):
+    d = str(d)
+    if d[0] == "#":
+        if len(d) == 7:
+            pattern = re.compile("[A-Za-z0-9]+")
+            if type(pattern.fullmatch(d[-6:])) == re.Match:
+                return True
+def pidcheck(d):
+    d = str(d)
+    if len(d) == 9:
+        if d.isdigit() is True:
+            return True
+        
+byr, iyr, eyr, hgt, hcl, ecl, pid = x["byr"], x["iyr"], x["eyr"], x["hgt"], x["hcl"], x["ecl"], x["pid"]
+for i in range(len(byr)):
+    byr[i] = byr[i] if (len(str(byr[i]))==4) and (int(byr[i])<=2002) and (int(byr[i])>=1920) else np.nan
+    iyr[i] = iyr[i] if (len(str(iyr[i]))==4) and (int(iyr[i])>=2010) and (int(iyr[i])<=2020) else np.nan
+    eyr[i] = eyr[i] if (len(str(eyr[i]))==4) and (int(eyr[i])>=2020) and (int(eyr[i])<=2030) else np.nan
+    hgt[i] = hgt[i] if hgtcheck(hgt[i]) is True else np.nan
+    hcl[i] = hcl[i] if hclcheck(hcl[i]) is True else np.nan
+    ecl[i] = ecl[i] if str(ecl[i]) in ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"] else np.nan
+    pid[i] = pid[i] if pidcheck(pid[i]) is True else np.nan
+    
+mask = False
+for col in x.columns: 
+    mask = mask | x[col].isnull()
+dfnulls = x[mask]
+validpart2 = len(df) - len(dfnulls)
+
+print(validpart1, validpart2)
