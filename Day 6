@@ -1,0 +1,16 @@
+with open("aoc6.txt",'r') as file:
+     rawdata = file.read()
+rawdata = rawdata.split("\n\n")
+data, count, count2 = [], 0, 0
+for i in rawdata:
+    data.append(i.split("\n"))
+for j in range(len(data)):
+    string = ""
+    for k in range(len(data[j])):
+        string = string+str(data[j][k])
+    count += len(set(string))
+for j in range(len(data)):
+    string = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"}
+    for k in range(len(data[j])):
+        string = string.intersection(set(data[j][k]))
+    count2 += len(set(string))
