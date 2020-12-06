@@ -1,0 +1,23 @@
+with open("aoc5.txt",'r') as file:
+     data = file.readlines()
+bp_scores = []
+seats     = np.zeros([128,8])
+for k in data:
+    x = k
+    front, back, left, right = 0, 128, 0, 8
+    for i in x:
+        if   i == "B":
+            front = (front+back)/2
+        elif i == "F":
+            back = (front+back)/2
+        elif i == "R":
+            left = (right+left)/2
+        elif i == "L":
+            right  = (right+left)/2
+    bp_scores.append((front*8)+left)
+    seats[int(front)][int(left)] = 1
+print(max(bp_scores))
+for i in range(0,127):
+    for j in range(0,7):
+        if seats[i][j] == 0 and seats[i+1][j] == 1 and seats[i-1][j] == 1:
+            print((i*8)+j)
