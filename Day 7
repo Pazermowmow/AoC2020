@@ -1,0 +1,20 @@
+with open("aoc7.txt") as data:
+    for line in data:  
+        rules[re.match(r"\w+ \w+", line).group(0)] = re.findall(r"(\d+) (\w+ \w+)", line)
+colour_t = "shiny gold"
+
+def holds(colour_t): # Target colour
+    for colour, contains in rules.items():                                 # Returns dict entry for colour and what it contains
+        if any(sub_colour == colour_t for colour, sub_colour in contains): # Loops inputs for the colour yielded
+            yield colour                                              
+            yield from holds(colour)                                       # Nested function to exhaust all colours
+
+def bags_required(colour):
+    total = 0
+    for count, sub_colour in rules[colour]:
+        total += int(count)*bags_required(sub_colour)
+    return total+1
+
+
+print(len(set(holds(colour_t))))
+print(bags_required(colour_t)-1)                                           # -1 to remove the +1 for the final loop of the function
