@@ -1,0 +1,37 @@
+with open("aoc8.txt") as file:
+    rawdata = file.read()
+data = rawdata.split("\n")
+
+def loop(data):
+    acc, index, path = 0, 0, []
+    while index < len(data):
+        x = data[index]
+        y = x.split()
+        if y[0] == "acc":
+            acc2 = acc + int(y[1])
+            index += 1
+        if y[0] == "jmp":
+            index += int(y[1])
+        if y[0] == "nop":
+            index += 1
+        if index in path:
+            return int(acc), False, index
+        else:
+            path.append(index)
+            acc = acc2
+    return int(acc), True
+
+part1 = loop(data)
+print(part1[0])
+
+
+change = [index for index in range(part1[2]) if data[index] and data[index].split()[0] in ["jmp","nop"]]
+for x in change:
+    new_data = data[:]
+    if new_data[x].split()[0] == "jmp":
+        new_data[x] = new_data[x].replace("jmp", "nop")
+    else:
+        new_data[x] = new_data[x].replace("nop", "jmp")
+    z = loop(new_data)
+    if z[1] is True:
+        print(z[0])
