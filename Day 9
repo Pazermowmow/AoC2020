@@ -8,23 +8,21 @@ for i in range(len(data[25:])):
     i = i+25
     valid = False
     for j in data[i-25:i]:
-        j = int(j)
         for k in data[i-25:i]:
-            k = int(k)
-            if (j != k) and (j + k == int(data[i])):
+            if (j != k) and (j + k == data[i]):
                 valid = True
     if valid is False:
-        invalid = i, int(data[i])
-        
+        invalid = i, data[i]
         break
+print("Invalid entry: ", invalid) # Part 1
 
 for i in range(len(data[:invalid[0]])):
     total = 0
     while total<invalid[1]:
         for j in range(len(data[i:invalid[0]])):
             j = j+i
-            total = total+int(data[j])
+            total = total+data[j]
             if total == invalid[1]:
-                print(i, j)
+                print("Start/end index of continuous set: ",i, j)
                 
-print(min(data[388:405])+max(data[388:405]))
+print("Sum of min/max within continuous set: ",min(data[388:405])+max(data[388:405])) # Part 2
