@@ -1,0 +1,35 @@
+with open("aoc10.txt") as file:
+    rawdata = file.read()
+data = rawdata.split("\n")
+for i in range(len(data)):
+    data[i] = int(data[i])
+data.append(0)
+data.append(max(data)+3)
+data.sort()
+
+diffs, diff1, diff3, permutations = [], 0, 0, 1
+for i in range(len(data)-1):
+    if data[i+1] - data[i] == 1:
+        diff1 += 1
+        diffs.append(1)
+    elif data[i+1] - data[i] == 2:
+        diffs.append(2)
+    elif data[i+1] - data[i] == 3:
+        diff3 += 1
+        diffs.append(3)
+print(diff1*diff3)
+
+i = 0
+while i < len(diffs):
+    if diffs[i:i+4] == [1,1,1,1]:
+        permutations = 7*permutations
+        i = i + 4
+    elif diffs[i:i+3] == [1,1,1]:
+        permutations = 4*permutations
+        i = i + 3
+    elif diffs[i:i+2] == [1,1]:
+        permutations = 2*permutations
+        i = i + 2
+    else:
+        i = i + 1
+print(permutations)
