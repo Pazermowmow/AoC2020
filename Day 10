@@ -7,7 +7,7 @@ data.append(0)
 data.append(max(data)+3)
 data.sort()
 
-diffs, diff1, diff3, permutations = [], 0, 0, 1
+diffs, diff1, diff3 = [], 0, 0
 for i in range(len(data)-1):
     if data[i+1] - data[i] == 1:
         diff1 += 1
@@ -19,17 +19,16 @@ for i in range(len(data)-1):
         diffs.append(3)
 print(diff1*diff3)
 
-i = 0
+tribon, i, p = [0,0,1], 0, 1
+for i in range(3, diff1*diff3):
+    tribon.append(tribon[i-3]+tribon[i-2]+tribon[i-1])
 while i < len(diffs):
-    if diffs[i:i+4] == [1,1,1,1]:
-        permutations = 7*permutations
-        i = i + 4
-    elif diffs[i:i+3] == [1,1,1]:
-        permutations = 4*permutations
-        i = i + 3
-    elif diffs[i:i+2] == [1,1]:
-        permutations = 2*permutations
-        i = i + 2
-    else:
-        i = i + 1
+    count=1
+    if diffs[i] == 1:
+        j=i
+        count=0
+        while diffs[j] == 1:
+            j, count = j+1, count+1
+    permutations*=tribon[count+2]
+    i+=count
 print(permutations)
